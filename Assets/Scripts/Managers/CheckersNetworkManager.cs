@@ -40,9 +40,11 @@ public class CheckersNetworkManager : NetworkManager
 
         NetworkPlayers.Add(player);
 
+        
+
         NetworkServer.AddPlayerForConnection(conn, player.gameObject);
 
-        player.IsWhite = numPlayers == 1;
+        player.IsLobbyOwner = player.IsWhite = numPlayers == 1;
 
         player.DisplayName = player.IsWhite ? "White" : "Black";
     }

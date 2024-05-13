@@ -9,9 +9,25 @@ using UnityEngine;
 public class PlayerNetwork : Player
 {
     [SyncVar(hook = nameof (ClientDisplayNameUpdated))] string displayName;
+    public string DisplayName
+    {
+        get { return displayName; }
 
+        [Server]
+        set { displayName = value; }
+    }
+
+    [SyncVar(hook = nameof(AuthorityHandleLobbyOwnerStateUpdated))] bool isLobbyOwner;
+    public bool IsLobbyOwner
+    {
+        get { return IsLobbyOwner; }
+
+        [Server]
+        set { isLobbyOwner = value; }
+    }
 
     public static event Action ClientInfoUpdated;
+    public static event Action<bool> AuthorityLobbyOwnerStateUpdated;
 
     public override void OnStartClient()
     {
@@ -33,16 +49,17 @@ public class PlayerNetwork : Player
         ClientInfoUpdated?.Invoke();
     }
 
-    public string DisplayName
-    {
-        get { return displayName; }
-
-        [Server]
-        set { displayName = value; }
-    }
 
     private void ClientDisplayNameUpdated(string oldName, string newName)
     {
         ClientInfoUpdated?.Invoke();
+    }
+
+    private void AuthorityHandleLobbyOwnerStateUpdated(bool oldState, bool newState)
+    {
+        if (!hasAuthority) return;
+
+        AuthorityLobbyOwnerStateUpdated?.Invoke(newState);
+
     }
 }

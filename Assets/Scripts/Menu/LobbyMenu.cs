@@ -15,11 +15,16 @@ public class LobbyMenu : MonoBehaviour
     private void OnEnable()
     {
         PlayerNetwork.ClientInfoUpdated += OnClientInfoUpdated;
+
+        PlayerNetwork.AuthorityLobbyOwnerStateUpdated += AuthorityHandleLobbyOwnerStateUpdated;
     }
+
 
     private void OnDisable()
     {
         PlayerNetwork.ClientInfoUpdated -= OnClientInfoUpdated;
+
+        PlayerNetwork.AuthorityLobbyOwnerStateUpdated -= AuthorityHandleLobbyOwnerStateUpdated;
     }
 
     private void OnClientInfoUpdated()
@@ -34,6 +39,14 @@ public class LobbyMenu : MonoBehaviour
         {
             playerNameTexts[i].text = "Waiting for player...";
         }
+
+        startGameButton.interactable = players.Count == 2;
+    }
+    private void AuthorityHandleLobbyOwnerStateUpdated(bool state)
+    {
+ 
+
+        startGameButton.gameObject.SetActive(state);
     }
 
     public void StartGame()
