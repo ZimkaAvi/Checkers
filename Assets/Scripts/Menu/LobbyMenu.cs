@@ -49,8 +49,9 @@ public class LobbyMenu : MonoBehaviour
         startGameButton.gameObject.SetActive(state);
     }
 
+    
     public void StartGame()
     {
-        
+        NetworkManager.singleton.ServerChangeScene("Game Scene");
     }
 }
