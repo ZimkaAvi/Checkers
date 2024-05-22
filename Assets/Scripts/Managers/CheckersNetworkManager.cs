@@ -13,10 +13,10 @@ public class CheckersNetworkManager : NetworkManager
 
     public List<PlayerNetwork> NetworkPlayers { get; } = new();
 
-
+    
 
     public static event Action ClientConnected;
-
+    public static event Action ServerGameStarted;
 
     public override void OnStartServer()
     {
@@ -32,6 +32,9 @@ public class CheckersNetworkManager : NetworkManager
     {
         if (sceneName.StartsWith("Game"))
         {
+            ServerGameStarted?.Invoke();
+                
+
             GameObject gameOverhandlerInstance = Instantiate(gameOverHandlerPrefab);
 
             NetworkServer.Spawn(gameOverhandlerInstance);
@@ -41,7 +44,7 @@ public class CheckersNetworkManager : NetworkManager
     public override void OnClientConnect()
     {
         base.OnClientConnect();
-        ClientConnected!.Invoke();
+        ClientConnected?.Invoke();
         
     }
 

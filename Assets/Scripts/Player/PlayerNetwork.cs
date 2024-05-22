@@ -29,6 +29,11 @@ public class PlayerNetwork : Player
     public static event Action ClientInfoUpdated;
     public static event Action<bool> AuthorityLobbyOwnerStateUpdated;
 
+    private void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     public override void OnStartClient()
     {
         if(isClientOnly)

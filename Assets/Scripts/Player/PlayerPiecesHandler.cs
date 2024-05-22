@@ -32,7 +32,7 @@ public class PlayerPiecesHandler : NetworkBehaviour
                 for (int x = (z == 1 ? 0 : 1); x < 8; x += 2)
                     Spawn(blackPiecePrefab, x, z + 5);
     }
-
+    
     protected virtual void Spawn(GameObject prefab, int xPos, int zPos)
     {
         var position = new Vector3(xPos, 0, zPos);
