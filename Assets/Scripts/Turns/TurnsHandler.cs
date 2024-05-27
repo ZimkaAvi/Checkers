@@ -30,7 +30,7 @@ public class TurnsHandler : NetworkBehaviour
         else Destroy(gameObject);
     }
     #endregion
-
+    
     public void Surrender()
     {
         OnGameOver?.Invoke(WhiteTurn ? BLACK_WIN : WHITE_WIN);

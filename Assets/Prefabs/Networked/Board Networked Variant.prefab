@@ -59,6 +59,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Board Networked Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 7050638798972160879, guid: 99d22c2b4c6bcba42a45494fc38fca15, type: 3}
+      propertyPath: m_AssetId
+      value: 55c3b11fac387604ba761ec7cf45aa52
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 391261010249633295, guid: 99d22c2b4c6bcba42a45494fc38fca15, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 99d22c2b4c6bcba42a45494fc38fca15, type: 3}
