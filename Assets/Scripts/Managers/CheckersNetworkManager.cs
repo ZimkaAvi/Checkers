@@ -12,8 +12,8 @@ public class CheckersNetworkManager : NetworkManager
         turnsHandlerPrefab;
 
     public List<PlayerNetwork> NetworkPlayers { get; } = new();
+    public List<Player> Players { get; } = new();
 
-    
 
     public static event Action ClientConnected;
     public static event Action ServerGameStarted;
@@ -61,7 +61,7 @@ public class CheckersNetworkManager : NetworkManager
 
         NetworkPlayers.Add(player);
 
-        
+        Players.Add(player);
 
         NetworkServer.AddPlayerForConnection(conn, player.gameObject);
 
@@ -76,6 +76,7 @@ public class CheckersNetworkManager : NetworkManager
         PlayerNetwork player = conn.identity.GetComponent<PlayerNetwork>();
 
         NetworkPlayers.Remove(player);
+        Players.Remove(player);
 
         base.OnServerDisconnect(conn);
     }
@@ -83,5 +84,6 @@ public class CheckersNetworkManager : NetworkManager
     public override void OnStopServer()
     {
         NetworkPlayers.Clear();
+        Players.Clear();
     }
 }

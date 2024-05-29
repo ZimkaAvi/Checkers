@@ -9,7 +9,7 @@ public class TurnsHandlerNetworked : TurnsHandler
     public override void OnStartServer()
     {
         PlayerPiecesHandler.OnPiecesSpawned += NextTurn;
-        Players = LocalGameManager.Instance.Players;
+        Players = ((CheckersNetworkManager)NetworkManager.singleton).Players;
     }
 
     public override void OnStopServer()
