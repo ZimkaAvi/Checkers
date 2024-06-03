@@ -37,7 +37,7 @@ public class PieceMovementHandler : NetworkBehaviour
         OnLockSelectedPiece?.Invoke(true);
         selectionHandler.HighlightTiles(tile.MoveInfo.MovesAfterCapturing);
     }
-
+    
     protected virtual void Move(Vector3 position, bool nextTurn)
     {
         Vector2Int oldPosition = new Vector2Int(
