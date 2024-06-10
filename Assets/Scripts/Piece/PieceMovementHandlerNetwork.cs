@@ -16,6 +16,16 @@ public class PieceMovementHandlerNetwork : PieceMovementHandler
         TilesSelectionHandler.OnTileSelected -= HandleTileSelected;
     }
 
+    protected override void PlayAudio()
+    {
+        RPCPlayAudio();
+    }
+    [ClientRpc]
+    private void RPCPlayAudio()
+    {
+        base.PlayAudio();
+    }
+
     protected override void Move(Vector3 position, bool nextTurn)
     {
         CMDMove(position, nextTurn);
