@@ -22,10 +22,31 @@ public class BoardNetwork : Board
     {
         Capture(BoardList, piecePosition);
     }
+    [Server]
+    private bool TryPromotePieceOnBoard(PiecePromotionHandler promotedPiece, int x, int z)
+    {
+        PromotePieceOnBoard(boardList, x, z);
+        RPCPromotePieceOnBoard(x, z);
+        return true;
+    }
+    [ClientRpc]
+    private void RPCPromotePieceOnBoard(int x, int z)
+    {
+        if(NetworkServer.active)
+        {
+            return;
+        }
+        PromotePieceOnBoard(boardList, x, z);
+    }
 
     public override void OnStartServer()
     {
         FillBoardList(BoardList);
+        PieceMovementHandlerNetwork.ServerOnPieceReachedBackline += TryPromotePieceOnBoard;
+    }
+    public override void OnStopServer()
+    {
+        PieceMovementHandlerNetwork.ServerOnPieceReachedBackline -= TryPromotePieceOnBoard;
     }
     [Server]
     public override void MoveOnBoard(Vector2Int oldPosition, Vector2Int newPosition, bool nextTurn)
