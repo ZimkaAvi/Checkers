@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
+using System.Security.Policy;
 using UnityEngine;
 
 public class PlayerNetwork : Player
@@ -71,5 +72,10 @@ public class PlayerNetwork : Player
     public void CMDNextTurn()
     {
         TurnsHandler.Instance.NextTurn();
+    }
+    [Command]
+    public void CMDGameOver(string result)
+    {
+        TurnsHandler.Instance.Surrender(result);
     }
 }

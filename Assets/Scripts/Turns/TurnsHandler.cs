@@ -68,6 +68,16 @@ public class TurnsHandler : NetworkBehaviour
         {
             OnGameOver?.Invoke(WhiteTurn ? WHITE_WIN : BLACK_WIN);
         }
+        else if (this is TurnsHandlerNetworked)
+        {
+            foreach(PlayerNetwork player in Players)
+            {
+                if(player.IsWhite == WhiteTurn)
+                {
+                    OnGameOver?.Invoke($"The winner: {player.DisplayName}");
+                }
+            }
+        }
     }
 
     protected void GenerateMoves(Transform playerPiecesParent)
