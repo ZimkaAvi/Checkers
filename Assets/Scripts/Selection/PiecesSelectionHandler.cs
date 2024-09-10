@@ -19,6 +19,7 @@ public class PiecesSelectionHandler : MonoBehaviour
         PieceMovementHandler.OnPieceMoved += DeselectPiece;
         PieceMovementHandler.OnLockSelectedPiece += LockPiece;
         TurnsHandler.Instance.OnMovesGenerated += ReselectPiece;
+        GameOverHandler.ClientOnGameOver += OnGameOverLock;
         if (!LocalGameManager.Instance)
             isLocal = false;
     }
@@ -28,6 +29,7 @@ public class PiecesSelectionHandler : MonoBehaviour
         PieceMovementHandler.OnPieceMoved -= DeselectPiece;
         PieceMovementHandler.OnLockSelectedPiece -= LockPiece;
         TurnsHandler.Instance.OnMovesGenerated -= ReselectPiece;
+        GameOverHandler.ClientOnGameOver -= OnGameOverLock;
     }
 
     void Update()
@@ -68,5 +70,10 @@ public class PiecesSelectionHandler : MonoBehaviour
     {
         if (SelectedPiece)
             OnPieceSelected?.Invoke(SelectedPiece);
+    }
+
+    void OnGameOverLock(string message)
+    {
+        LockPiece(true);
     }
 }

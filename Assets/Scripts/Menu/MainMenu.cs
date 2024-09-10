@@ -9,9 +9,20 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] GameObject landingPagePanel, onlinePage, lobbyParent;
 
+    public static bool UseSteam
+    {
+        get; private set;
+    } = true;
     public void HostLobby()
     {
-        NetworkManager.singleton.StartHost();
+        if(UseSteam)
+        {
+            SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, 2);
+        }
+        else
+        {
+            NetworkManager.singleton.StartHost();
+        }
     }
 
     public void ExitGame()
