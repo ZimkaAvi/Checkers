@@ -1,4 +1,5 @@
 using Mirror;
+using Mono.CecilX.Cil;
 using Steamworks;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,10 +10,35 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] GameObject landingPagePanel, onlinePage, lobbyParent;
 
+    Callback<LobbyCreated_t> lobbyCreated;
+
+    
+
     public static bool UseSteam
     {
         get; private set;
     } = true;
+
+    public static CSteamID LobbyID { get; private set; }
+
+    private void Start()
+    {
+        if(!UseSteam)
+        {
+            return;
+        }
+        lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
+    }
+
+    private void OnDestroy()
+    {
+        if(!UseSteam)
+        {
+            return;
+        }
+        lobbyCreated?.Dispose();
+    }
+
     public void HostLobby()
     {
         if(UseSteam)
@@ -23,6 +49,30 @@ public class MainMenu : MonoBehaviour
         {
             NetworkManager.singleton.StartHost();
         }
+    }
+
+    private void OnLobbyCreated(LobbyCreated_t callback)
+    {
+        if(!UseSteam)
+        {
+            return; 
+        }
+
+        if(callback.m_eResult != EResult.k_EResultOK)
+        {
+            landingPagePanel.SetActive(true);
+            return;
+        }
+
+        LobbyID = new CSteamID(callback.m_ulSteamIDLobby);
+
+        SteamMatchmaking.SetLobbyData(
+           LobbyID,
+           "hostAddress",
+           SteamUser.GetSteamID().ToString()
+            );
+
+        NetworkManager.singleton.StartHost();
     }
 
     public void ExitGame()
