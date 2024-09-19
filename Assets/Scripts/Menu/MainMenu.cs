@@ -1,5 +1,4 @@
 using Mirror;
-using Mono.CecilX.Cil;
 using Steamworks;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,8 +10,11 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject landingPagePanel, onlinePage, lobbyParent;
 
     Callback<LobbyCreated_t> lobbyCreated;
-
+    Callback<GameLobbyJoinRequested_t> gameLobbyJoinRequested;
+    Callback<LobbyEnter_t> lobbyEntered;
     
+
+
 
     public static bool UseSteam
     {
@@ -28,7 +30,10 @@ public class MainMenu : MonoBehaviour
             return;
         }
         lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
+        gameLobbyJoinRequested = Callback<GameLobbyJoinRequested_t>.Create(OnGameLobbyJoinRequested);
+        lobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
     }
+
 
     private void OnDestroy()
     {
@@ -37,6 +42,9 @@ public class MainMenu : MonoBehaviour
             return;
         }
         lobbyCreated?.Dispose();
+        gameLobbyJoinRequested?.Dispose();
+        lobbyEntered?.Dispose();
+
     }
 
     public void HostLobby()
@@ -73,6 +81,36 @@ public class MainMenu : MonoBehaviour
             );
 
         NetworkManager.singleton.StartHost();
+    }
+
+    private void OnGameLobbyJoinRequested(GameLobbyJoinRequested_t callback)
+    {
+        if (!UseSteam)
+        {
+            return;
+        }
+        SteamMatchmaking.JoinLobby(callback.m_steamIDLobby);
+    }
+
+    private void OnLobbyEntered(LobbyEnter_t callback)
+    {
+        if (!UseSteam || NetworkServer.active )
+        {
+            return;
+        }
+        LobbyID = new CSteamID(callback.m_ulSteamIDLobby);
+
+        string hostAddress = SteamMatchmaking.GetLobbyData(LobbyID, "hostAddress");
+
+        NetworkManager.singleton.networkAddress = hostAddress;
+
+        NetworkManager.singleton.StartClient();
+
+        landingPagePanel.SetActive(false);
+        onlinePage.SetActive(false);
+
+        
+
     }
 
     public void ExitGame()

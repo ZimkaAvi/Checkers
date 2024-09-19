@@ -9,7 +9,23 @@ using UnityEngine;
 
 public class PlayerNetwork : Player
 {
-    [SyncVar(hook = nameof (ClientDisplayNameUpdated))] string displayName;
+    [SyncVar(hook = nameof(ClientDisplayNameUpdated))] string displayName;
+    [SyncVar] ulong steamID;
+
+    public ulong SteamID 
+    { 
+        get { return steamID; } 
+
+
+        [Server]
+        set 
+        {
+            steamID = value; 
+            CSteamID cid = new CSteamID(steamID);
+            DisplayName = SteamFriends.GetFriendPersonaName(cid);
+        } 
+    }
+
     public string DisplayName
     {
         get { return displayName; }

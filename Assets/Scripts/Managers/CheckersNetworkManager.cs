@@ -67,7 +67,15 @@ public class CheckersNetworkManager : NetworkManager
 
         player.IsLobbyOwner = player.IsWhite = numPlayers == 1;
 
-        player.DisplayName = player.IsWhite ? "White" : "Black";
+        if(MainMenu.UseSteam)
+        {
+            CSteamID steamID = SteamMatchmaking.GetLobbyMemberByIndex(MainMenu.LobbyID, numPlayers - 1);
+            player.SteamID = steamID.m_SteamID;
+        }
+        else
+        {
+            player.DisplayName = player.IsWhite ? "White" : "Black";
+        }
     }
 
 
